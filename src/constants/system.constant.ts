@@ -1,1 +1,1 @@
-export const ADMIN_NO = 'saber'
+export const ADMIN_NO = 'saber';

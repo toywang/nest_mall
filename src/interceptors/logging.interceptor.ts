@@ -17,7 +17,7 @@ export class LoggingInterceptor implements NestInterceptor {
     next: CallHandler<any>,
   ): Observable<any> {
     const call$ = next.handle();
-    const request = context.switchToHttp().getRequest().req;
+    const request = context.switchToHttp().getRequest();
     const content = request.method + ' -> ' + request.url;
     const body = request.body ? JSON.stringify(request.body) : '{}';
     this.logger.info(`收到请求：${content} body: ${body}`);

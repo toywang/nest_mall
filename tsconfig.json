@@ -28,6 +28,7 @@
       "@constants/*": ["./src/constants/*"],
       "@utils/*": ["./src/utils/*"],
       "@transforms/*": ["./src/transforms/*"],
+      "@middlewares/*": ["./src/middlewares/*"],
       "@decorators/*": ["./src/decorators/*"]
     }
   }

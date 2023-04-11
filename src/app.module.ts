@@ -15,6 +15,9 @@ import loadConfig from './config/configurations';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
+// 中间件
+import { CorsMiddleware } from '@middlewares/cors.middleware';
+import { OriginMiddleware } from '@middlewares/origin.middleware';
 
 const businessModules = [AuthModule, UserModule];
 const libModules = [
@@ -70,8 +73,10 @@ const libModules = [
   providers: [AppService],
 })
 export class AppModule implements NestModule {
-  // 应用全局中间件
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(logger).forRoutes({ path: '*', method: RequestMethod.ALL });
+    consumer.apply(CorsMiddleware, OriginMiddleware).forRoutes({
+      path: '(.*)?',
+      method: RequestMethod.ALL,
+    });
   }
 }

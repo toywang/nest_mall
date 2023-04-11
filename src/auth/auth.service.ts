@@ -8,6 +8,8 @@ import { RegisterDto } from './dto/registerDto';
 import { Auth } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PlatformError } from '@src/exceptions/platform.error';
+import { DEFAULT_ERROR } from '@src/constants/error/general.constant';
 
 @Injectable()
 export class AuthService {
@@ -62,10 +64,10 @@ export class AuthService {
   async register(user: RegisterDto) {
     const existUser = await this.findByUsername(user.username);
     if (existUser) {
-      return {
-        code: 400,
-        message: '用户已存在',
-      };
+      throw new PlatformError({
+        code: DEFAULT_ERROR.code,
+        msg: '用户已存在',
+      });
     }
     try {
       const admin = new Auth();

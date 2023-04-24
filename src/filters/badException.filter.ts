@@ -5,35 +5,33 @@ import {
   HttpException,
   ArgumentsHost,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 
-/**
- * @class HttpExceptionFilter
- * @classdesc 拦截全局抛出的所有异常，同时任何错误将在这里被规范化输出 THttpErrorResponse
- */
-@Catch()
-export class HttpExceptionFilter implements ExceptionFilter {
+@Catch(BadRequestException)
+export class BadHttpExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: Logger) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const request = host.switchToHttp().getRequest().req;
     const response = host.switchToHttp().getResponse();
 
-    const message = exception.message;
+    const badRes: any = exception.getResponse();
+    let status = HttpStatus.BAD_REQUEST;
     const errorResponse = {
       data: {
-        error: message,
+        error: exception.message,
       }, // 获取全部的错误信息
       message: '请求失败',
-      code: 1, // 自定义code
+      code: 0, // 自定义code
     };
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
-
+    //处理验证失败的提示信息
+    if (badRes.message) {
+      errorResponse.message = badRes.message;
+      status = HttpStatus.OK; //这里主要是为了前端能够提示出来信息，否则直接返回400的话，前端直接报400
+    }
     // 设置返回的状态码、请求头、发送错误信息
-    this.logger.error(exception.toString());
+    this.logger.error(errorResponse.toString());
     response.status(status);
     response.header('Content-Type', 'application/json; charset=utf-8');
     response.send(errorResponse);

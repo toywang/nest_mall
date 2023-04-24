@@ -1,5 +1,4 @@
 import { Injectable, NestMiddleware, HttpStatus } from '@nestjs/common';
-import { ANONYMOUSE_ERROR } from '@constants/error/general.constant';
 
 /**
  * @class OriginMiddleware

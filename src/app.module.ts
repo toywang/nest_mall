@@ -6,44 +6,40 @@ import {
 } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import loadConfig from './config/configurations';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import configurations from './config/configurations';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
 // 中间件
 import { CorsMiddleware } from '@middlewares/cors.middleware';
 import { OriginMiddleware } from '@middlewares/origin.middleware';
+import { PermissionModule } from '@modules/permission/permission.module';
+import { RoleModule } from '@modules/role/role.module';
 
-const businessModules = [AuthModule, UserModule];
+const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
   ConfigModule.forRoot({
-    load: [loadConfig],
-    envFilePath: ['.env'],
+    ignoreEnvFile: false,
+    cache: true,
+    load: [configurations],
+    isGlobal: true,
   }),
   ScheduleModule.forRoot(),
   TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
     useFactory: (configService: ConfigService) => {
-      const { host, port, username, password, database } =
-        configService.get('db');
-
       return {
         type: 'mysql',
-        // .env 获取
-        host,
-        port,
-        username,
-        password,
-        database,
-        // entities
         entities: ['dist/**/*.entity{.ts,.js}'],
-      };
+        keepConnectionAlive: true,
+        ...configService.get('db.mysql'),
+      } as TypeOrmModuleOptions;
     },
   }),
   WinstonModule.forRoot({

@@ -19,8 +19,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@src/*": ["./src/*"],
-      "@config/*": ["./src/config/*"],
-      "@config": ["./src/config/main.config.ts"],
+      "@config/*": ["src/config/*"],
+      "@config": ["src/config/main.config.ts"],
       "@interfaces/*": ["./src/interfaces/*"],
       "@filters/*": ["./src/filters/*"],
       "@interceptors/*": ["./src/interceptors/*"],
@@ -29,6 +29,7 @@
       "@utils/*": ["./src/utils/*"],
       "@transforms/*": ["./src/transforms/*"],
       "@middlewares/*": ["./src/middlewares/*"],
+      "@modules/*": ["./src/modules/*"],
       "@decorators/*": ["./src/decorators/*"]
     }
   }

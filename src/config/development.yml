@@ -1,0 +1,38 @@
+# 开发环境配置
+environment: 'development'
+app:
+  prefix: '/api'
+  port: 8082
+  swagger: true
+  logger:
+    # 项目日志存储路径，相对路径（相对本项目根目录）或绝对路径
+    dir: '../logs'
+  # 文件相关
+  file:
+    # location 文件上传后存储目录，相对路径（相对本项目根目录）或绝对路径
+    location: '../upload'
+    # 文件服务器地址
+    domain: 'http://localhost:8081'
+    # 文件虚拟路径, 必须以 / 开头
+    serveRoot: '/static'
+# 数据库配置
+db:
+  mysql:
+    host: '127.0.0.1'
+    username: 'root'
+    password: '123123qq'
+    database: 'mallshop'
+    port: 3306
+
+# redis 配置
+redis:
+  host: 'localhost'
+  port: 6379
+  db: 0
+  keyPrefix: 'nest:'
+
+# jwt 配置
+jwt:
+  secretkey: 'zANDwNQVFzxlfG9myPxVWAkq4iXJEPhI'
+  expiresin: '1h'
+  refreshExpiresIn: '2h'

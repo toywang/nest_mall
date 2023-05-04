@@ -26,13 +26,12 @@ db:
 
 # redis 配置
 redis:
-  host: 'localhost'
+  host: '127.0.0.1'
   port: 6379
   db: 0
-  keyPrefix: 'nest:'
-
+  password: '123456'
+  token_expire: 1800000
 # jwt 配置
 jwt:
-  secretkey: 'zANDwNQVFzxlfG9myPxVWAkq4iXJEPhI'
-  expiresin: '1h'
-  refreshExpiresIn: '2h'
+  secret: 'jktusernamemallqwer'
+  expiresIn: 1600

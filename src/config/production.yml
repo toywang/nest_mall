@@ -1,5 +1,5 @@
-# pro环境配置
-environment: 'production'
+# 开发环境配置
+environment: 'development'
 app:
   prefix: '/api'
   port: 8082
@@ -23,24 +23,15 @@ db:
     password: '123123qq'
     database: 'mallshop'
     port: 3306
-    charser: 'utf8mb4'
-    logger: 'advanced-console'
-    logging: true
-    multipleStatements: true
-    dropSchema: false
-    synchronize: true
-    supportBigNumbers: true
-    bigNumberStrings: true
 
 # redis 配置
 redis:
-  host: 'localhost'
+  host: '127.0.0.1'
   port: 6379
   db: 0
-  keyPrefix: 'nest:'
+  auth_pass: '123456'
 
 # jwt 配置
 jwt:
-  secretkey: 'zANDwNQVFzxlfG9myPxVWAkq4iXJEPhI'
-  expiresin: '1h'
-  refreshExpiresIn: '2h'
+  secret: 'jktusernamemallqwer'
+  expiresIn: 1600

@@ -17,8 +17,8 @@ export class UmsRole {
   description: string;
 
   @ApiProperty({ description: '后台用户数量' })
-  @Column({ length: 500, name: 'admin_count' })
-  adminCount: string;
+  @Column({ name: 'admin_count' })
+  adminCount: number;
 
   @ApiProperty({ description: '启用状态：0->禁用；1->启用' })
   @Column()
@@ -33,10 +33,10 @@ export class UmsRole {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createTime: string;
+  createTime: Date;
   @BeforeInsert()
   createDate() {
     // 更新entity前更新LastUpdatedDate
-    this.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    this.createTime = new Date();
   }
 }

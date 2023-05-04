@@ -23,8 +23,9 @@ import { BasePageDto } from '@src/common/BasePageDto';
 import { UpdateRoleDto } from './dto/UpdateRoleDto';
 import { EntityManager, Transaction, TransactionManager } from 'typeorm';
 import { UserService } from '../user/user.service';
+import { ConfigService } from '@nestjs/config';
 
-@ApiTags('admin')
+@ApiTags('登录注册及用户相关模块')
 @Controller('admin')
 export class AuthController {
   constructor(
@@ -32,6 +33,7 @@ export class AuthController {
     private readonly permissionService: PermissionService,
     private readonly roleService: RoleService,
     private readonly userService: UserService,
+    private readonly configService: ConfigService,
   ) {}
   @ApiOperation({
     summary: '后台登录',
@@ -41,6 +43,7 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('login')
   async login(@Request() req) {
+    console.log('configService', this.configService.get('jwt.secret'));
     return this.authService.login(req.user);
   }
 
@@ -70,7 +73,7 @@ export class AuthController {
   })
   @Get('info')
   async getAdminInfo(@Request() req) {
-    console.log(req.user);
+    console.log('req.user', req.user);
     const user = req.user;
     const menuList = await this.permissionService.getMenuList(user.id);
     const roleList = await this.roleService.getRoleListById(user.id);
@@ -80,7 +83,7 @@ export class AuthController {
       roles: roleList,
     };
 
-    return CommonResult.successCommon(result);
+    return result;
   }
 
   @ApiOperation({
@@ -96,7 +99,7 @@ export class AuthController {
       query.pageNum,
     );
 
-    return CommonResult.successCommon(result);
+    return result;
   }
 
   @ApiOperation({
@@ -105,7 +108,7 @@ export class AuthController {
   @Get('/role/:id') // 艹，，这个获取参数查半天
   async getRoleListById(@Param('id') id: string) {
     const roleList = await this.roleService.getRoleListById(id);
-    return CommonResult.successCommon(roleList);
+    return roleList;
   }
 
   @ApiOperation({
@@ -122,7 +125,7 @@ export class AuthController {
     const result = {
       data: res,
     };
-    return CommonResult.successCommon(result);
+    return result;
   }
 
   @ApiOperation({
@@ -131,7 +134,7 @@ export class AuthController {
   @Post('/delete/:id') // 艹，，这个获取参数查半天
   async deleteUserById(@Param('id') id: string) {
     await this.userService.remove(Number(id));
-    return CommonResult.successCommon('操作成功');
+    return '操作成功';
   }
 
   @ApiOperation({
@@ -140,6 +143,6 @@ export class AuthController {
   @Post('/update/:id') // 艹，，这个获取参数查半天
   async updateUserById(@Param('id') id: string, @Body() user: RegisterDto) {
     await this.userService.update(Number(id), user);
-    return CommonResult.successCommon('操作成功');
+    return '操作成功';
   }
 }

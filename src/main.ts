@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { HttpExceptionFilter } from './filters/exception.filter';
 import { BadHttpExceptionFilter } from './filters/badException.filter';
+import { TransformInterceptor } from './interceptors/transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {});
@@ -26,10 +27,12 @@ async function bootstrap() {
   );
   const nestWinston = app.get('NestWinston');
 
-  // 添加拦截器
-  app.useGlobalInterceptors(new LoggingInterceptor(nestWinston.logger));
+  // 异常过滤器
   app.useGlobalFilters(new HttpExceptionFilter(nestWinston.logger));
   app.useGlobalFilters(new BadHttpExceptionFilter(nestWinston.logger));
+  // 添加拦截器
+  app.useGlobalInterceptors(new LoggingInterceptor(nestWinston.logger));
+  app.useGlobalInterceptors(new TransformInterceptor());
   //创建swagger
   const document = SwaggerModule.createDocument(app, swaggerOptions);
   //启动swagger

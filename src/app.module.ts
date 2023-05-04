@@ -20,6 +20,12 @@ import { CorsMiddleware } from '@middlewares/cors.middleware';
 import { OriginMiddleware } from '@middlewares/origin.middleware';
 import { PermissionModule } from '@modules/permission/permission.module';
 import { RoleModule } from '@modules/role/role.module';
+import { RedisCacheModule } from '@modules/redis-cache/redis-cache.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
+import { RedisCacheService } from './modules/redis-cache/redis-cache.service';
+import { MenuModule } from './modules/menu/menu.module';
+import { ResourceCategoryModule } from './modules/resource-category/resource-category.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -33,11 +39,15 @@ const libModules = [
   TypeOrmModule.forRootAsync({
     imports: [ConfigModule],
     inject: [ConfigService],
+
     useFactory: (configService: ConfigService) => {
       return {
         type: 'mysql',
         entities: ['dist/**/*.entity{.ts,.js}'],
         keepConnectionAlive: true,
+        logging: true,
+        bigNumberStrings: false, //这里为了避免数据库中的bigint类型转成了字符串类型
+
         ...configService.get('db.mysql'),
       } as TypeOrmModuleOptions;
     },
@@ -64,9 +74,9 @@ const libModules = [
   }),
 ];
 @Module({
-  imports: [...libModules, ...businessModules],
+  imports: [...libModules, ...businessModules, RedisCacheModule, MenuModule, ResourceCategoryModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RedisCacheService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

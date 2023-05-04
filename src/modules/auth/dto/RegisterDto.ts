@@ -18,7 +18,7 @@ export class RegisterDto {
   icon: string;
 
   @ApiProperty({ type: String, description: '邮箱' })
-  @IsEmail()
+  @IsEmail({ message: '请输入正确的邮箱' })
   @IsOptional()
   email: string;
 

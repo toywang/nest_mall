@@ -16,7 +16,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: Logger) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
-    const request = host.switchToHttp().getRequest().req;
+    const request = host.switchToHttp().getRequest();
     const response = host.switchToHttp().getResponse();
 
     const message = exception.message;
@@ -24,17 +24,21 @@ export class HttpExceptionFilter implements ExceptionFilter {
       data: {
         error: message,
       }, // 获取全部的错误信息
-      message: '请求失败',
-      code: 1, // 自定义code
+      message: message || '请求失败',
+      code: 0, // 自定义code
     };
     const status =
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
-
+    const { url, headers, method, body } = request;
+    const ua = headers['user-agent'];
     // 设置返回的状态码、请求头、发送错误信息
-    this.logger.error(exception.toString());
-    response.status(status);
+    this.logger.error(
+      `${method} ${url} ${ua} ${JSON.stringify(body)} ${exception.stack}`,
+    );
+    errorResponse.code = status;
+    response.status(200);
     response.header('Content-Type', 'application/json; charset=utf-8');
     response.send(errorResponse);
   }

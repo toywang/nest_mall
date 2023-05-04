@@ -1,13 +1,15 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@src/modules/user/entities/user.entity';
-import { jwtConstants } from './constants';
 import * as bcrypt from 'bcrypt';
 import { RegisterDto } from './dto/registerDto';
 import { Auth } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonResult } from '@src/common/CommonResult';
+import { ConfigService } from '@nestjs/config';
+import { RedisCache } from '../redis-cache/entities/redis-cache.entity';
+import { RedisCacheService } from '../redis-cache/redis-cache.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +17,8 @@ export class AuthService {
     @InjectRepository(Auth)
     private userRepository: Repository<Auth>,
     private readonly jwtService: JwtService,
+    private readonly redisCacheService: RedisCacheService,
+    private readonly configServe: ConfigService,
   ) {}
   /**
    *
@@ -56,9 +60,15 @@ export class AuthService {
       tokenHead: 'Bearer ',
       token: this.jwtService.sign(payload),
       user: restUser,
-      expiresIn: jwtConstants.expiresIn,
+      expiresIn: this.configServe.get('jwt.expiresIn'),
     };
-    return CommonResult.successCommon(result);
+    const key = `${payload.id}-${payload.username}`;
+    await this.redisCacheService.cacheSet(
+      key,
+      result.token,
+      this.configServe.get<number>('redis.token_expire'),
+    );
+    return result;
   }
   async register(user: RegisterDto) {
     const existUser = await this.findByUsername(user.username);

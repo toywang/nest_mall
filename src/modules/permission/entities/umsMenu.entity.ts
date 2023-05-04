@@ -5,12 +5,15 @@ import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('ums_menu')
 export class UmsMenu {
   @ApiProperty({ description: '自增 id' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn({
+    type: 'bigint',
+  })
   id: number;
 
   @ApiProperty({ description: '父级ID' })
   @Column({
     name: 'parent_id',
+    type: 'bigint',
   })
   parentId: number;
 

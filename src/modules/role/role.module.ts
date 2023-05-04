@@ -6,6 +6,8 @@ import { UmsAdminRoleRelation } from '@modules/permission/entities/umsAdminRoleR
 import { UmsRole } from '@modules/permission/entities/umsRole.entity';
 import { Auth } from '@modules/auth/entities/auth.entity';
 import { UmsRoleMenuRelation } from '../permission/entities/umsRoleMenuRelation.entity';
+import { Resource } from '../resource/entities/resource.entity';
+import { RoleResource } from './entities/role.resource.entity';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import { UmsRoleMenuRelation } from '../permission/entities/umsRoleMenuRelation.
       UmsRole,
       Auth,
       UmsRoleMenuRelation,
+      RoleResource,
     ]),
   ],
   controllers: [RoleController],

@@ -9,6 +9,8 @@ import { UpdateRoleDto } from '../auth/dto/UpdateRoleDto';
 import { UmsRoleMenuRelation } from '../permission/entities/umsRoleMenuRelation.entity';
 import { UmsMenu } from '../permission/entities/umsMenu.entity';
 import { RoleInfoDto } from './dto/roleInfoDto';
+import { RoleResource } from './entities/role.resource.entity';
+import { Resource } from '../resource/entities/resource.entity';
 
 @Injectable()
 export class RoleService {
@@ -21,6 +23,8 @@ export class RoleService {
     private roleRepository: Repository<UmsRole>,
     @InjectRepository(UmsRoleMenuRelation)
     private rmrRepository: Repository<UmsRoleMenuRelation>,
+    @InjectRepository(RoleResource)
+    private rrRepository: Repository<RoleResource>,
   ) {}
   /**
    * 查询 登录用户可用的菜单和对应的角色
@@ -152,7 +156,7 @@ export class RoleService {
   }
 
   /**
-   * 查询 分配菜单给角色
+   * 分配菜单给角色
    * @param roleId
    * @menuIds 菜单IDs
    * @returns
@@ -242,5 +246,57 @@ export class RoleService {
   async deleteRole(ids: number) {
     const result = await this.roleRepository.delete({ id: ids });
     return '删除成功';
+  }
+
+  /**
+   * 查询 角色对应的资源
+   * @param roleId
+   * @returns
+   */
+  async getResourceListById(roleId: number) {
+    const sql = await this.rrRepository
+      .createQueryBuilder('rr')
+      .leftJoinAndSelect(Resource, 'r', 'r.id = rr.resourceId')
+      .where('rr.roleId = :roleId', { roleId: roleId })
+      .addGroupBy('rr.id')
+      .select(
+        `r.id as id,
+         r.name as name,
+         r.url as url,
+         r.createTime as createTime,
+         r.categoryId as categoryId,
+         r.description as description
+      `,
+      )
+      .printSql()
+      .getRawMany();
+    return sql;
+  }
+
+  /**
+   * 分配资源给角色
+   * @param roleId
+   * @menuIds 菜单IDs
+   * @returns
+   */
+  async doAllocResourceByRole(roleId: number, resourceIds: Array<number>) {
+    const delRes = await this.rrRepository
+      .createQueryBuilder('rr')
+      .delete()
+      .from(RoleResource)
+      .where('roleId = :roleId', { roleId: roleId })
+      .printSql()
+      .execute();
+    const values = resourceIds.map((value) => {
+      return { roleId: roleId, resourceId: value };
+    });
+
+    const size = await this.rrRepository
+      .createQueryBuilder('rr')
+      .insert()
+      .values(values)
+      .printSql()
+      .execute();
+    return '操作成功';
   }
 }

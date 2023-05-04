@@ -19,6 +19,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BasePageDto } from '@src/common/BasePageDto';
 import { AllocMenuDto } from './dto/allocMenuDto';
 import { RoleInfoDto } from './dto/roleInfoDto';
+import { AllocResourceDto } from './dto/allocResourceDto';
 
 @ApiTags('角色模块')
 @Controller('role')
@@ -116,6 +117,32 @@ export class RoleController {
   @Post('delete')
   async deleteRole(@Body('ids') ids: number) {
     const result = await this.roleService.deleteRole(ids);
+    return result;
+  }
+
+  @ApiOperation({
+    summary: '获取角色相关的资源',
+  })
+  @Get('/listResource/:id')
+  async listResourceById(@Param('id') id: number) {
+    const result = await this.roleService.getResourceListById(id);
+    return result;
+  }
+
+  @ApiOperation({
+    summary: '分配资源给角色',
+  })
+  @Post('allocResource')
+  async allocResourceByRole(@Body() allocResourceDto: AllocResourceDto) {
+    const { roleId, resourceIds } = allocResourceDto;
+    const resources = resourceIds.split(',').map(Number);
+    if (!resources.length) {
+      throw new HttpException('资源ID不能为空', HttpStatus.OK);
+    }
+    const result = await this.roleService.doAllocResourceByRole(
+      roleId,
+      resources,
+    );
     return result;
   }
 }

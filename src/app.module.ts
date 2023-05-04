@@ -26,6 +26,7 @@ import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RedisCacheService } from './modules/redis-cache/redis-cache.service';
 import { MenuModule } from './modules/menu/menu.module';
 import { ResourceCategoryModule } from './modules/resource-category/resource-category.module';
+import { ResourceModule } from './modules/resource/resource.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -74,7 +75,7 @@ const libModules = [
   }),
 ];
 @Module({
-  imports: [...libModules, ...businessModules, RedisCacheModule, MenuModule, ResourceCategoryModule],
+  imports: [...libModules, ...businessModules, RedisCacheModule, MenuModule, ResourceCategoryModule, ResourceModule],
   controllers: [AppController],
   providers: [AppService, RedisCacheService],
 })

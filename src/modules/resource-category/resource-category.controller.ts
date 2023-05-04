@@ -1,18 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ResourceCategoryService } from './resource-category.service';
 import { CreateResourceCategoryDto } from './dto/create-resource-category.dto';
 import { UpdateResourceCategoryDto } from './dto/update-resource-category.dto';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('resource-category')
+@ApiTags('后台资源分类管理')
+@Controller('resourceCategory')
 export class ResourceCategoryController {
-  constructor(private readonly resourceCategoryService: ResourceCategoryService) {}
+  constructor(
+    private readonly resourceCategoryService: ResourceCategoryService,
+  ) {}
 
   @Post()
   create(@Body() createResourceCategoryDto: CreateResourceCategoryDto) {
     return this.resourceCategoryService.create(createResourceCategoryDto);
   }
 
-  @Get()
+  @Get('listAll')
   findAll() {
     return this.resourceCategoryService.findAll();
   }
@@ -23,7 +35,10 @@ export class ResourceCategoryController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateResourceCategoryDto: UpdateResourceCategoryDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateResourceCategoryDto: UpdateResourceCategoryDto,
+  ) {
     return this.resourceCategoryService.update(+id, updateResourceCategoryDto);
   }
 

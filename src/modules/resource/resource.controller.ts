@@ -6,40 +6,48 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ResourceService } from './resource.service';
-import { CreateResourceDto } from './dto/create-resource.dto';
-import { UpdateResourceDto } from './dto/update-resource.dto';
 
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ResourcePageDto } from './dto/resourcePage.dto';
+import { CommonResult } from '@src/common/CommonResult';
+
+@ApiTags('后台资源模块')
 @Controller('resource')
 export class ResourceController {
   constructor(private readonly resourceService: ResourceService) {}
 
-  @Post()
-  create(@Body() createResourceDto: CreateResourceDto) {
-    return this.resourceService.create(createResourceDto);
-  }
-
+  @ApiOperation({
+    summary: '获取全部资源列表',
+  })
   @Get('listAll')
   findAll() {
     return this.resourceService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.resourceService.findOne(+id);
+  @ApiOperation({
+    summary: '获取全部资源分页列表',
+  })
+  @Get('list')
+  async findListPage(@Query() pageDto: ResourcePageDto) {
+    const pageList = await this.resourceService.getResourcePageList(pageDto);
+    const result = CommonResult.pageData(
+      pageList,
+      pageDto.pageSize,
+      pageDto.pageNum,
+    );
+
+    return result;
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateResourceDto: UpdateResourceDto,
-  ) {
-    return this.resourceService.update(+id, updateResourceDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.resourceService.remove(+id);
+  @ApiOperation({
+    summary: '删除资源',
+  })
+  @Get('/delete/:id')
+  async delete(@Param('id') id: number) {
+    const result = await this.resourceService.deleteResource(id);
+    return result;
   }
 }

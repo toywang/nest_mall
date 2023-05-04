@@ -50,10 +50,10 @@ export class UmsMenu {
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createTime: string;
+  createTime: Date;
   @BeforeInsert()
   createDate() {
     // 更新entity前更新LastUpdatedDate
-    this.createTime = moment().format('YYYY-MM-DD HH:mm:ss');
+    this.createTime = new Date();
   }
 }

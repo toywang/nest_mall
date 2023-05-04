@@ -1,5 +1,4 @@
 import { ApiProperty } from '@nestjs/swagger';
-import moment from 'moment';
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('ums_menu')

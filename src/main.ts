@@ -6,6 +6,7 @@ import { LoggingInterceptor } from './interceptors/logging.interceptor';
 import { HttpExceptionFilter } from './filters/exception.filter';
 import { BadHttpExceptionFilter } from './filters/badException.filter';
 import { TransformInterceptor } from './interceptors/transform.interceptor';
+import { knife4jSetup } from 'nest-knife4j';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {});
@@ -19,6 +20,16 @@ async function bootstrap() {
     .setVersion('1.0') //文档版本
     .addBasicAuth() //鉴权，可以输入token
     .build(); //创建
+  const documentfe = SwaggerModule.createDocument(app, swaggerOptions);
+  SwaggerModule.setup('api', app, documentfe);
+  knife4jSetup(app, [
+    {
+      name: '1.0版本',
+      url: `/api-json`,
+      swaggerVersion: '1.0',
+      location: `/api-json`,
+    },
+  ]);
   app.useGlobalPipes(
     new ValidationPipe({
       // fix parameter escape

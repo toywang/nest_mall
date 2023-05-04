@@ -10,7 +10,9 @@ import {
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RegisterDto } from '../auth/dto/registerDto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('后台用户模块')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

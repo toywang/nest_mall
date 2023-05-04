@@ -3,8 +3,7 @@ import { UmsMenu } from '../permission/entities/umsMenu.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasePageDto } from '@src/common/BasePageDto';
-import { ResourceInfoDto } from '../resource/dto/resourceInfo.dto';
-import { info } from 'console';
+
 import { MenuInfoDto } from './dto/menuInfo.dto';
 
 @Injectable()

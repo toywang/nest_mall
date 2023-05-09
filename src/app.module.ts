@@ -42,6 +42,7 @@ const libModules = [
     inject: [ConfigService],
 
     useFactory: (configService: ConfigService) => {
+      console.log('configService.get', configService.get('db.mysql'));
       return {
         type: 'mysql',
         entities: ['dist/**/*.entity{.ts,.js}'],
@@ -75,7 +76,14 @@ const libModules = [
   }),
 ];
 @Module({
-  imports: [...libModules, ...businessModules, RedisCacheModule, MenuModule, ResourceCategoryModule, ResourceModule],
+  imports: [
+    ...libModules,
+    ...businessModules,
+    RedisCacheModule,
+    MenuModule,
+    ResourceCategoryModule,
+    ResourceModule,
+  ],
   controllers: [AppController],
   providers: [AppService, RedisCacheService],
 })

@@ -1,5 +1,5 @@
 # 开发环境配置
-environment: 'development'
+environment: 'production'
 app:
   prefix: '/api'
   port: 8082
@@ -18,18 +18,19 @@ app:
 # 数据库配置
 db:
   mysql:
-    host: '127.0.0.1'
+    host: 'mysql'
     username: 'root'
     password: '123123qq'
     database: 'mallshop'
-    port: 3306
+    port: 3307
 
 # redis 配置
 redis:
-  host: '127.0.0.1'
-  port: 6379
+  host: redis
+  port: 6389
   db: 0
-  auth_pass: '123456'
+  password: '123456'
+  token_expire: 1800000
 
 # jwt 配置
 jwt:

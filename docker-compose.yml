@@ -1,0 +1,52 @@
+version: '3.0'
+
+services:
+  # docker容器启动的redis默认是没有redis.conf的配置文件，所以用docker启动redis之前，需要先去官网下载redis.conf的配置文件
+  redis: # 服务名称
+    container_name: redis # 容器名称
+    image: redis:6.2 # 使用官方镜像
+    # 配置redis.conf方式启动
+    command: redis-server /usr/local/etc/redis/redis.conf --requirepass 123456 --appendonly yes # 设置redis登录密码 123456、--appendonly yes：这个命令是用于开启redis数据持久化
+    # 无需配置文件方式启动
+    # command: redis-server  --appendonly yes # 设置redis登录密码 123456
+    ports:
+      - 6389:6379 # 本机端口:容器端口
+    restart: on-failure # 自动重启
+    volumes:
+      - /Users/jackwang/Documents/nodejserve/deploy/redis/redis.conf:/usr/local/etc/redis/redis.conf # 把redis的配置文件挂载到宿主机
+      - /Users/jackwang/Documents/nodejserve/deploy/redis/db:/usr/local/var/db/redis/ # 把redis的配置文件挂载到宿主机
+    environment:
+      - TZ=Asia/Shanghai # 解决容器 时区的问题
+    networks:
+      - my-server
+
+  mysql:
+    container_name: mysql
+    image: mysql:8.0.20 # 使用官方镜像
+    ports:
+      - 3307:3306 # 本机端口:容器端口
+    restart: on-failure
+    environment:
+      - MYSQL_ROOT_PASSWORD=123123qq # root用户密码
+    networks:
+      - my-server
+
+  my-mall: # nest服务
+    container_name: my-mall
+    build: # 根据Dockerfile构建镜像
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    restart: on-failure # 设置自动重启，这一步必须设置，主要是存在mysql还没有启动完成就启动了node服务
+    networks:
+      - my-server
+    depends_on: # node服务依赖于mysql和redis
+      - redis
+      - mysql
+
+# 声明一下网桥  my-server。
+# 重要：将所有服务都挂载在同一网桥即可通过容器名来互相通信了
+# 如egg连接mysql和redis，可以通过容器名来互相通信
+networks:
+  my-server:

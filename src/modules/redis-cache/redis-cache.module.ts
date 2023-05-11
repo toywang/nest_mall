@@ -9,24 +9,6 @@ import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
 
 @Module({
   imports: [
-    // RedisModule.forRoot({
-    //   config: {
-    //     password: '123456',
-    //     url: 'redis://127.0.0.1:6389',
-    //   },
-    // }),
-    // RedisModule.forRootAsync({
-    //   useFactory: async (configService: ConfigService) => {
-    //     console.log('configService.get', configService.get('redis'));
-    //     return {
-    //       config: {
-    //         url: `redis://${configService.get(
-    //           'redis.host',
-    //         )}:${configService.get('redis.port')}`,
-    //       },
-    //     };
-    //   },
-    // }),
     CacheModule.registerAsync({
       isGlobal: true,
       imports: [ConfigModule],
@@ -47,11 +29,6 @@ import { RedisModule, RedisModuleOptions } from '@nestjs-modules/ioredis';
         } as RedisClientOptions;
       },
     }),
-    // CacheModule.register({
-    //   store: redisStore,
-    //   host: 'localhost',
-    //   port: 6379,
-    // }),
   ],
   controllers: [RedisCacheController],
   providers: [RedisCacheService],

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ApiTags } from '@nestjs/swagger';
-import { RegisterDto } from '../auth/dto/registerDto';
+import { RegisterDto } from '../auth/dto/RegisterDto';
 
 @ApiTags('后台用户模块')
 @Controller('user')

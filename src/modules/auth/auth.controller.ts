@@ -15,7 +15,7 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/LoginDto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { SkipJwtAuth } from './constants';
-import { RegisterDto } from './dto/registerDto';
+import { RegisterDto } from './dto/RegisterDto';
 import { PermissionService } from '@modules/permission/permission.service';
 import { CommonResult } from '@src/common/CommonResult';
 import { RoleService } from '@modules/role/role.service';

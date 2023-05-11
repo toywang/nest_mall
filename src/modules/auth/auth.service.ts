@@ -2,7 +2,7 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@src/modules/user/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { RegisterDto } from './dto/registerDto';
+import { RegisterDto } from './dto/RegisterDto';
 import { Auth } from './entities/auth.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';

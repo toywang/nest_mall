@@ -21,12 +21,12 @@ import { OriginMiddleware } from '@middlewares/origin.middleware';
 import { PermissionModule } from '@modules/permission/permission.module';
 import { RoleModule } from '@modules/role/role.module';
 import { RedisCacheModule } from '@modules/redis-cache/redis-cache.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '@modules/auth/guards/jwt-auth.guard';
 import { RedisCacheService } from './modules/redis-cache/redis-cache.service';
 import { MenuModule } from './modules/menu/menu.module';
 import { ResourceCategoryModule } from './modules/resource-category/resource-category.module';
 import { ResourceModule } from './modules/resource/resource.module';
+import { ProductModule } from './modules/product/product.module';
+import { BrandModule } from './modules/brand/brand.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -83,6 +83,8 @@ const libModules = [
     MenuModule,
     ResourceCategoryModule,
     ResourceModule,
+    ProductModule,
+    BrandModule,
   ],
   controllers: [AppController],
   providers: [AppService, RedisCacheService],

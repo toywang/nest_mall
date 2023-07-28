@@ -12,6 +12,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import configurations from './config/configurations';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
+
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import 'winston-daily-rotate-file';
@@ -27,6 +30,10 @@ import { ResourceCategoryModule } from './modules/resource-category/resource-cat
 import { ResourceModule } from './modules/resource/resource.module';
 import { ProductModule } from './modules/product/product.module';
 import { BrandModule } from './modules/brand/brand.module';
+import { ProductCategoryModule } from './modules/product-category/product-category.module';
+import { UploadModule } from './modules/upload/upload.module';
+import { MulterModule } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -85,6 +92,23 @@ const libModules = [
     ResourceModule,
     ProductModule,
     BrandModule,
+    ProductCategoryModule,
+    UploadModule,
+    MulterModule.register({
+      storage: diskStorage({
+        //文件上传的地址
+        destination: path.join(__dirname, '../uploads'),
+        filename: (req, file, callback) => {
+          const name = file.originalname.split('.')[0];
+          const fileExtName = path.extname(file.originalname);
+          callback(null, `${name}${fileExtName}`);
+        },
+      }),
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, '..', 'public/uploaded'),
+      serveRoot: '/static',
+    }),
   ],
   controllers: [AppController],
   providers: [AppService, RedisCacheService],

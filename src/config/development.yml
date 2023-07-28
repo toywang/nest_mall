@@ -35,3 +35,10 @@ redis:
 jwt:
   secret: 'jktusernamemallqwer'
   expiresIn: 1600
+# oss配置
+oss:
+  accessKeyId: 'LTAI5tCopJrZQ931SZKe4xMi'
+  accessKeySecret: 'XUQbQmesPflnlBkOkbM2N871xys357'
+  endpoint: 'endpoint'
+  bucket: 'wwdtsccr'
+  region: 'oss-cn-beijing'

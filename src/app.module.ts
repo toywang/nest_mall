@@ -34,6 +34,9 @@ import { ProductCategoryModule } from './modules/product-category/product-catego
 import { UploadModule } from './modules/upload/upload.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { SubjectModule } from './modules/subject/subject.module';
+import { PrefrenceAreaModule } from './modules/prefrence-area/prefrence-area.module';
+import { ProductAttributeCategoryModule } from './modules/product-attribute-category/product-attribute-category.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -94,6 +97,9 @@ const libModules = [
     BrandModule,
     ProductCategoryModule,
     UploadModule,
+    SubjectModule,
+    PrefrenceAreaModule,
+    ProductAttributeCategoryModule,
     MulterModule.register({
       storage: diskStorage({
         //文件上传的地址

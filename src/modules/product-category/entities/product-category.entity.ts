@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from '@src/modules/product/entities/product.entity';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('pms_product_category')
 export class ProductCategory {
@@ -50,4 +51,7 @@ export class ProductCategory {
   @ApiProperty({ description: '描述' })
   @Column({ type: 'text' })
   description: string;
+
+  @OneToOne((type) => Product, (product) => product.productCategory)
+  product: Product;
 }

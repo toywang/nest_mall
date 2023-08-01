@@ -23,6 +23,18 @@ export class ProductCategoryController {
     private readonly productCategoryService: ProductCategoryService,
   ) {}
 
+  //这个必须放在前面，否则会先适配下面路由
+  @ApiOperation({
+    summary: '获取产品分类列表分级',
+  })
+  @Get('/list/withChildren')
+  async getProductCategoryChildList(@Request() req) {
+    const childList =
+      await this.productCategoryService.getProductCategoryChildList();
+
+    return childList;
+  }
+
   @ApiOperation({
     summary: '获取产品分类列表',
   })
@@ -38,17 +50,5 @@ export class ProductCategoryController {
       page.pageNum,
     );
     return result;
-  }
-
-  @ApiOperation({
-    summary: '获取产品分类列表分级',
-  })
-  @Get('/list/withChildren')
-  async getProductCategoryChildList(@Request() req) {
-    console.log(req.user);
-    const childList =
-      await this.productCategoryService.getProductCategoryChildList();
-
-    return childList;
   }
 }

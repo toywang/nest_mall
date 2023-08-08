@@ -8,6 +8,8 @@ import { MemberPrice } from './entities/member-price.entity';
 import { ProductAttributeValue } from './entities/product-attribute-value.entity';
 import { ProductFullReduction } from './entities/product-full-reduction.entity';
 import { SkuStock } from './entities/sku-stock.entity';
+import { PrefrenceAreaProductRelation } from './entities/prefrence-area-product-relation.entity';
+import { SubjectProductRelation } from './entities/subject-product-relation.entity';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { SkuStock } from './entities/sku-stock.entity';
       ProductAttributeValue,
       ProductFullReduction,
       SkuStock,
+      PrefrenceAreaProductRelation,
+      SubjectProductRelation,
     ]),
   ],
 

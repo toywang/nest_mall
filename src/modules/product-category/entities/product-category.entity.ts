@@ -1,6 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Product } from '@src/modules/product/entities/product.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('pms_product_category')
 export class ProductCategory {

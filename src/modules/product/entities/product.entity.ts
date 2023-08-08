@@ -15,6 +15,9 @@ import { ProductFullReduction } from './product-full-reduction.entity';
 import { MemberPrice } from './member-price.entity';
 import { SkuStock } from './sku-stock.entity';
 import { ProductAttributeValue } from './product-attribute-value.entity';
+import { PrefrenceArea } from '@src/modules/prefrence-area/entities/prefrence-area.entity';
+import { PrefrenceAreaProductRelation } from './prefrence-area-product-relation.entity';
+import { SubjectProductRelation } from './subject-product-relation.entity';
 
 @Entity('pms_product')
 export class Product {
@@ -121,7 +124,8 @@ export class Product {
   @Column({ length: 255, name: 'sub_title' })
   subTitle: string;
 
-  @ApiProperty({ description: '描述' })
+  @ApiProperty({ description: '商品描述' })
+  @Column({ type: 'text' })
   description: string;
 
   @ApiProperty({ description: '是否为预告商品：0->不是；1->是' })
@@ -193,20 +197,20 @@ export class Product {
     (type) => ProductCategory,
     (productCategory) => productCategory.product,
   )
-  @JoinColumn({ name: 'id' })
+  @JoinColumn({ name: 'product_category_id' })
   productCategory: ProductCategory;
 
   @OneToMany((type) => ProductLadder, (productLadder) => productLadder.product)
-  productLadder: ProductLadder[];
+  productLadderList: ProductLadder[];
 
   @OneToMany(
     (type) => ProductFullReduction,
     (productFullReduction) => productFullReduction.product,
   )
-  productFullReduction: ProductFullReduction[];
+  productFullReductionList: ProductFullReduction[];
 
   @OneToMany((type) => MemberPrice, (memberPrice) => memberPrice.product)
-  memberPrice: MemberPrice[];
+  memberPriceList: MemberPrice[];
 
   @OneToMany((type) => SkuStock, (skuStock) => skuStock.product)
   skuStockList: SkuStock[];
@@ -215,5 +219,17 @@ export class Product {
     (type) => ProductAttributeValue,
     (attributeValue) => attributeValue.product,
   )
-  attributeValue: ProductAttributeValue[];
+  productAttributeValueList: ProductAttributeValue[];
+
+  @OneToMany(
+    (type) => PrefrenceAreaProductRelation,
+    (prefrenceAreaProductRelation) => prefrenceAreaProductRelation.product,
+  )
+  prefrenceAreaProductRelationList: PrefrenceAreaProductRelation[];
+
+  @OneToMany(
+    (type) => SubjectProductRelation,
+    (subjectProductRelation) => subjectProductRelation.product,
+  )
+  subjectProductRelationList: SubjectProductRelation[];
 }

@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductAttributeCategoryDto } from './dto/create-product-attribute-category.dto';
-import { UpdateProductAttributeCategoryDto } from './dto/update-product-attribute-category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductAttributeCategory } from './entities/product-attribute-category.entity';
 import { Repository } from 'typeorm';
 import { BasePageDto } from '@src/common/BasePageDto';
+import { CommonResult } from '@src/common/CommonResult';
 
 @Injectable()
 export class ProductAttributeCategoryService {
@@ -13,8 +12,17 @@ export class ProductAttributeCategoryService {
     private pacRepository: Repository<ProductAttributeCategory>,
   ) {}
 
-  create(createProductAttributeCategoryDto: CreateProductAttributeCategoryDto) {
-    return 'This action adds a new productAttributeCategory';
+  async create(caName: string) {
+    const result = await this.pacRepository.findOne({ name: caName });
+    if (result) {
+      return CommonResult.failedCommon('分类已存在', 500);
+    }
+
+    const newM = new ProductAttributeCategory();
+    newM.attributeCount = 0;
+    newM.paramCount = 0;
+    newM.name = caName;
+    return await this.pacRepository.save(newM);
   }
   /**
    * 分页
@@ -35,18 +43,37 @@ export class ProductAttributeCategoryService {
     return res;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} productAttributeCategory`;
+  /**
+   * 获取所有商品属性分类及其下属性
+   * @returns
+   */
+  async getAttrilist() {
+    const sql = await this.pacRepository
+      .createQueryBuilder('pac')
+      .leftJoinAndSelect('pac.productAttributeList', 'productAttributeList')
+      .printSql()
+      .getMany();
+    return sql;
   }
 
-  update(
-    id: number,
-    updateProductAttributeCategoryDto: UpdateProductAttributeCategoryDto,
-  ) {
-    return `This action updates a #${id} productAttributeCategory`;
+  /**
+   * 修改
+   * @returns
+   */
+  async updateAttribute(id: number, name: string) {
+    const result = await this.pacRepository.findOne({ id: id });
+
+    result.name = name;
+    return await this.pacRepository.save(result);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} productAttributeCategory`;
+  /**
+   * 删除
+   * @returns
+   */
+  async deleteAttribute(id: number) {
+    const result = await this.pacRepository.delete({ id: id });
+
+    return result;
   }
 }

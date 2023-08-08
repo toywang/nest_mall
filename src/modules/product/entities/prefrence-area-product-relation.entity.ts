@@ -8,8 +8,8 @@ import {
 } from 'typeorm';
 import { Product } from './product.entity';
 
-@Entity('pms_product_full_reduction')
-export class ProductFullReduction {
+@Entity('cms_prefrence_area_product_relation')
+export class PrefrenceAreaProductRelation {
   @ApiProperty({ description: '自增 id' })
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
@@ -19,14 +19,13 @@ export class ProductFullReduction {
   productId: number;
 
   @ApiProperty({ description: '' })
-  @Column({ type: 'decimal', name: 'full_price' })
-  fullPrice: number;
+  @Column({ type: 'bigint', name: 'prefrence_area_id' })
+  prefrenceAreaId: number;
 
-  @ApiProperty({ description: '' })
-  @Column({ type: 'decimal', name: 'reduce_price' })
-  reducePrice: number;
-
-  @ManyToOne((type) => Product, (product) => product.productFullReductionList)
+  @ManyToOne(
+    (type) => Product,
+    (product) => product.prefrenceAreaProductRelationList,
+  )
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

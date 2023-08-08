@@ -28,7 +28,7 @@ export class ProductAttributeValue {
   @Column({ type: 'varchar', length: 64 })
   value: string;
 
-  @ManyToOne((type) => Product, (product) => product.attributeValue)
+  @ManyToOne((type) => Product, (product) => product.productAttributeValueList)
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

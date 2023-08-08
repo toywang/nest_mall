@@ -37,6 +37,8 @@ import { diskStorage } from 'multer';
 import { SubjectModule } from './modules/subject/subject.module';
 import { PrefrenceAreaModule } from './modules/prefrence-area/prefrence-area.module';
 import { ProductAttributeCategoryModule } from './modules/product-attribute-category/product-attribute-category.module';
+import { ProductAttributeModule } from './modules/product-attribute/product-attribute.module';
+import { MemberLevelModule } from './modules/member-level/member-level.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -100,6 +102,8 @@ const libModules = [
     SubjectModule,
     PrefrenceAreaModule,
     ProductAttributeCategoryModule,
+    ProductAttributeModule,
+    MemberLevelModule,
     MulterModule.register({
       storage: diskStorage({
         //文件上传的地址

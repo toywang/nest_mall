@@ -30,7 +30,7 @@ export class ProductLadder {
   @Column({ type: 'decimal' })
   price: number;
 
-  @ManyToOne((type) => Product, (product) => product.productLadder)
+  @ManyToOne((type) => Product, (product) => product.productLadderList)
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

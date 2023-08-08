@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ProductAttribute } from '@src/modules/product-attribute/entities/product-attribute.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('pms_product_attribute_category')
 export class ProductAttributeCategory {
@@ -18,4 +19,10 @@ export class ProductAttributeCategory {
   @ApiProperty({ description: '参数数量' })
   @Column({ type: 'int', name: 'param_count' })
   paramCount: number;
+
+  @OneToMany(
+    (type) => ProductAttribute,
+    (productAttribute) => productAttribute.productAttributeCategory,
+  )
+  productAttributeList: ProductAttribute[];
 }

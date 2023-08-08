@@ -2,6 +2,8 @@ import {
   Body,
   Controller,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Post,
   Query,
@@ -13,17 +15,29 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BasePageDto } from '@src/common/BasePageDto';
 import { CommonResult } from '@src/common/CommonResult';
+import { EntityManager, Transaction, TransactionManager } from 'typeorm';
 
 @ApiTags('产品')
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  // @ApiOperation({
-  //   summary: '创建商品',
-  // })
-  // @Post('create')
-  // async create() {}
+  @ApiOperation({
+    summary: '创建商品',
+  })
+  @Post('create')
+  @Transaction()
+  async create(
+    @Body() updateDto: CreateProductDto,
+    @TransactionManager() maneger: EntityManager,
+  ) {
+    try {
+      const sql = await this.productService.createProduct(updateDto, maneger);
+      return sql;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
+  }
 
   @ApiOperation({
     summary: '获取产品列表',
@@ -62,7 +76,10 @@ export class ProductController {
   })
   @Get('/updateInfo/:id')
   async getProductDetail(@Param('id') id: string) {
-    const result = await this.productService.getProductById(id);
+    const sql = await this.productService.getProductById(id);
+    const result: any = { ...sql };
+    result.cateParentId = result.productCategory.parentId;
+
     return result;
   }
 
@@ -128,5 +145,27 @@ export class ProductController {
       deleteStatus,
     );
     return result;
+  }
+
+  @ApiOperation({
+    summary: '更新商品',
+  })
+  @Post('/update/:id')
+  @Transaction()
+  async updateProduct(
+    @Param('id') id: number,
+    @Body() updateDto: CreateProductDto,
+    @TransactionManager() maneger: EntityManager,
+  ) {
+    try {
+      const sql = await this.productService.updateProductById(
+        id,
+        updateDto,
+        maneger,
+      );
+      return sql;
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

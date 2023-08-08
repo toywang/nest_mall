@@ -30,7 +30,7 @@ export class MemberPrice {
   @Column({ type: 'varchar', name: 'member_level_name' })
   memberLevelName: string;
 
-  @ManyToOne((type) => Product, (product) => product.memberPrice)
+  @ManyToOne((type) => Product, (product) => product.memberPriceList)
   @JoinColumn({ name: 'product_id' })
   product: Product;
 }

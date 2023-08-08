@@ -51,4 +51,21 @@ export class ProductCategoryController {
     );
     return result;
   }
+
+  @ApiOperation({
+    summary: '获取产品分类列表',
+  })
+  @Post('create')
+  async createProductCategory(
+    @Param('id') id: number,
+    @Query() page: BasePageDto,
+  ) {
+    const childList = await this.productCategoryService.getCateList(page, id);
+    const result = CommonResult.pageData(
+      childList,
+      page.pageSize,
+      page.pageNum,
+    );
+    return result;
+  }
 }

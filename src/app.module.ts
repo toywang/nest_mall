@@ -39,6 +39,12 @@ import { PrefrenceAreaModule } from './modules/prefrence-area/prefrence-area.mod
 import { ProductAttributeCategoryModule } from './modules/product-attribute-category/product-attribute-category.module';
 import { ProductAttributeModule } from './modules/product-attribute/product-attribute.module';
 import { MemberLevelModule } from './modules/member-level/member-level.module';
+import { ReturnReason } from './modules/return-reason/entities/return-reason.entity';
+import { ReturnReasonModule } from './modules/return-reason/return-reason.module';
+import { OmsOrderModule } from './modules/oms-order/oms-order.module';
+import { ReturnApplyModule } from './modules/return-apply/return-apply.module';
+import { CompanyAddressModule } from './modules/company-address/company-address.module';
+import { OrderSettingModule } from './modules/order-setting/order-setting.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -104,6 +110,11 @@ const libModules = [
     ProductAttributeCategoryModule,
     ProductAttributeModule,
     MemberLevelModule,
+    ReturnReasonModule,
+    OmsOrderModule,
+    ReturnApplyModule,
+    CompanyAddressModule,
+    OrderSettingModule,
     MulterModule.register({
       storage: diskStorage({
         //文件上传的地址

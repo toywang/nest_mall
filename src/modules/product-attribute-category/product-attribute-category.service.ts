@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductAttributeCategory } from './entities/product-attribute-category.entity';
 import { Repository } from 'typeorm';
@@ -15,7 +15,7 @@ export class ProductAttributeCategoryService {
   async create(caName: string) {
     const result = await this.pacRepository.findOne({ name: caName });
     if (result) {
-      return CommonResult.failedCommon('分类已存在', 500);
+      throw new HttpException('名称已经存在', HttpStatus.BAD_REQUEST);
     }
 
     const newM = new ProductAttributeCategory();

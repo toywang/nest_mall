@@ -416,7 +416,7 @@ export class ProductService {
     queryFilter.deleteStatus = 0;
     if (keyword) {
       // 模糊查询 username
-      queryFilter.username = Like(`%${keyword}%`);
+      queryFilter.name = Like(`%${keyword}%`);
     }
     const res = await this.pmsRepository.findAndCount({
       // 查询条件
@@ -427,6 +427,27 @@ export class ProductService {
       skip: (pageNum - 1) * pageSize,
       // 每页条数
       take: pageSize,
+      // 是否缓存
+      cache: true,
+    });
+    return res;
+  }
+
+  /**
+   * 查询 产品列表 模糊
+   * @param dto
+   * @returns
+   */
+  async getSimpleProductList(keyword: string) {
+    const queryFilter: any = {};
+    queryFilter.deleteStatus = 0;
+    if (keyword) {
+      // 模糊查询 username
+      queryFilter.name = Like(`%${keyword}%`);
+    }
+    const res = await this.pmsRepository.find({
+      // 查询条件
+      where: queryFilter,
       // 是否缓存
       cache: true,
     });

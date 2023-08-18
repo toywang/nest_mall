@@ -45,6 +45,16 @@ import { OmsOrderModule } from './modules/oms-order/oms-order.module';
 import { ReturnApplyModule } from './modules/return-apply/return-apply.module';
 import { CompanyAddressModule } from './modules/company-address/company-address.module';
 import { OrderSettingModule } from './modules/order-setting/order-setting.module';
+import { HomeModule } from './modules/home/home.module';
+import { HomeRecommendProductController } from './modules/home-recommend-product/home-recommend-product.controller';
+import { HomeRecommendProductModule } from './modules/home-recommend-product/home-recommend-product.module';
+import { HomeRecommendSubjectModule } from './modules/home-recommend-subject/home-recommend-subject.module';
+import { CouponModule } from './modules/coupon/coupon.module';
+import { CouponHistoryModule } from './modules/coupon-history/coupon-history.module';
+import { HomeBrandModule } from './modules/home-brand/home-brand.module';
+import { HomeNewProductModule } from './modules/home-new-product/home-new-product.module';
+import { HomeAdvertiseModule } from './modules/home-advertise/home-advertise.module';
+import { FlashModule } from './modules/flash/flash.module';
 
 const businessModules = [AuthModule, UserModule, PermissionModule, RoleModule];
 const libModules = [
@@ -115,6 +125,15 @@ const libModules = [
     ReturnApplyModule,
     CompanyAddressModule,
     OrderSettingModule,
+    HomeModule,
+    HomeRecommendProductModule,
+    HomeRecommendSubjectModule,
+    CouponModule,
+    CouponHistoryModule,
+    HomeBrandModule,
+    HomeNewProductModule,
+    HomeAdvertiseModule,
+    FlashModule,
     MulterModule.register({
       storage: diskStorage({
         //文件上传的地址

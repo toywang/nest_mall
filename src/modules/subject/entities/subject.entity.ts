@@ -1,65 +1,80 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity('cms_subject')
+@Entity('cms_subject', { schema: 'mallshop' })
 export class Subject {
-  @ApiProperty({ description: '自增 id' })
-  @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number;
+  @PrimaryGeneratedColumn({ type: 'bigint', name: 'id' })
+  id: string;
 
-  @ApiProperty({ description: '分类ID' })
-  @Column({ name: 'category_id' })
-  categoryId: number;
+  @Column('bigint', { name: 'category_id', nullable: true })
+  categoryId: string | null;
 
-  @ApiProperty({ description: '标题' })
-  @Column({ type: 'varchar', length: 100 })
-  title: string;
+  @Column('varchar', { name: 'title', nullable: true, length: 100 })
+  title: string | null;
 
-  @ApiProperty({ description: '专题主图' })
-  @Column({ type: 'varchar', length: 500 })
-  pic: string;
+  @Column('varchar', {
+    name: 'pic',
+    nullable: true,
+    comment: '专题主图',
+    length: 500,
+  })
+  pic: string | null;
 
-  @ApiProperty({ description: '关联产品数量' })
-  @Column({ name: 'product_count' })
-  productCount: number;
+  @Column('int', {
+    name: 'product_count',
+    nullable: true,
+    comment: '关联产品数量',
+  })
+  productCount: number | null;
 
-  @ApiProperty({ description: '' })
-  @Column({ name: 'recommend_status', type: 'int' })
-  recommendStatus: number;
+  @Column('int', { name: 'recommend_status', nullable: true })
+  recommendStatus: number | null;
 
-  @ApiProperty({ description: '' })
-  @Column({ name: 'collect_count', type: 'int' })
-  collectCount: number;
+  @Column('datetime', { name: 'create_time', nullable: true })
+  createTime: Date | null;
+  @BeforeInsert()
+  createDate() {
+    // 更新entity前更新LastUpdatedDate
+    this.createTime = new Date();
+  }
 
-  @ApiProperty({ description: '' })
-  @Column({ name: 'read_count', type: 'int' })
-  readCount: number;
+  @Column('int', { name: 'collect_count', nullable: true })
+  collectCount: number | null;
 
-  @ApiProperty({ description: '' })
-  @Column({ name: 'comment_count', type: 'int' })
-  commentCount: number;
+  @Column('int', { name: 'read_count', nullable: true })
+  readCount: number | null;
 
-  @ApiProperty({ description: '画册图片用逗号分割' })
-  @Column({ type: 'varchar', length: 1000, name: 'album_pics' })
-  albumPics: string;
+  @Column('int', { name: 'comment_count', nullable: true })
+  commentCount: number | null;
 
-  @ApiProperty({ description: '' })
-  @Column({ type: 'varchar', length: 1000 })
-  description: string;
+  @Column('varchar', {
+    name: 'album_pics',
+    nullable: true,
+    comment: '画册图片用逗号分割',
+    length: 1000,
+  })
+  albumPics: string | null;
 
-  @ApiProperty({ description: '显示状态：0->不显示；1->显示' })
-  @Column({ name: 'show_status', type: 'int' })
-  showStatus: number;
+  @Column('varchar', { name: 'description', nullable: true, length: 1000 })
+  description: string | null;
 
-  @ApiProperty({ description: '转发数' })
-  @Column({ name: 'forward_count', type: 'int' })
-  forwardCount: number;
+  @Column('int', {
+    name: 'show_status',
+    nullable: true,
+    comment: '显示状态：0->不显示；1->显示',
+  })
+  showStatus: number | null;
 
-  @ApiProperty({ description: '' })
-  @Column({ type: 'text' })
-  content: string;
+  @Column('text', { name: 'content', nullable: true })
+  content: string | null;
 
-  @ApiProperty({ description: '专题分类名称' })
-  @Column({ name: 'category_name', type: 'varchar', length: 200 })
-  categoryName: string;
+  @Column('int', { name: 'forward_count', nullable: true, comment: '转发数' })
+  forwardCount: number | null;
+
+  @Column('varchar', {
+    name: 'category_name',
+    nullable: true,
+    comment: '专题分类名称',
+    length: 200,
+  })
+  categoryName: string | null;
 }

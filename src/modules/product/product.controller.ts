@@ -55,21 +55,15 @@ export class ProductController {
     return result;
   }
 
-  // @ApiOperation({
-  //   summary: '根据商品名称或货号模糊查询',
-  // })
-  // @Get('simpleList')
-  // async getList(@Query('') , @Request() req) {
-  //   console.log(req.user, query);
-  //   const pageList = await this.productService.getProductList(query);
-  //   const result = CommonResult.pageData(
-  //     pageList,
-  //     query.pageSize,
-  //     query.pageNum,
-  //   );
-
-  //   return result;
-  // }
+  @ApiOperation({
+    summary: '根据商品名称或货号模糊查询',
+  })
+  @Get('simpleList')
+  async getList(@Query('keyword') keyword: string, @Request() req) {
+    console.log('simp参数', req.user, keyword);
+    const pageList = await this.productService.getSimpleProductList(keyword);
+    return pageList;
+  }
 
   @ApiOperation({
     summary: '根据商品id获取商品编辑信息',

@@ -9,5 +9,6 @@ import { HomeAdvertise } from './entities/home-advertise.entity';
 
   controllers: [HomeAdvertiseController],
   providers: [HomeAdvertiseService],
+  exports: [HomeAdvertiseService],
 })
 export class HomeAdvertiseModule {}
